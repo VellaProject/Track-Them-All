@@ -5,23 +5,30 @@
 			#bar{ position: absolute; top:5px;left:720px; width: 500; height:40;
 					border: 3px solid black;
 					border-radius: 10px;
+					box-shadow:5px 5px 5px #555;
 			}
 			#progress{  width: 0; height:40;background-color:#7FFFD4; border-radius: 10px;
 			}
-			#user_score{ position: absolute; top:130px; left:350px; font-size:80px;
+			#user_score{ position: absolute; top:130px; left:390px; font-size:80px;
 			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
-			#score_img{ position: absolute; top:0px; left:0px; width: 400; height:100;}
-			#text_score{position: absolute; top:130px; left:5px; font-size:80px;
-			font-family:fantasy;}
-			#bar_score{ position: absolute; top:300px; left:350px; font-size:80px;
+			#score_img{ position: absolute; top:0px; left:0px; width: 400; height:100;
+			box-shadow:5px 5px 5px #555;
+			}
+			#text_score{position: absolute; top:130px; left:5px; font-size:80px; width:350px;
 			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
-			#text_bar{position: absolute; top:300px; left:10px; font-size:80px;
-			font-family:fantasy;}
+			#bar_score{ position: absolute; top:280px; left:390px; font-size:80px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#text_bar{position: absolute; top:280px; left:10px; font-size:80px; width:350px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#filter_val{position: absolute;top:3px;font-size:40px;font-family:fantasy;
+				right:160px;border: 1px solid black; box-shadow:5px 5px 5px #555;
+			}
 			body { margin: 0; }
 			canvas { width: 100%; height: 100%; background-image:url("http://iwallpapers.free.fr/upload/2013/01/05/20130105165505-dcc9fdf8.jpg");}
 		</style>
 	</head>
 	<body>
+	<div id= "filter_val"></div>
 	<div id = "text_score">Tweet Hit</div>
 	<div id = "user_score">0</div>
 	<div id = "text_bar">Full Bar</div>
@@ -47,6 +54,9 @@
 			var dirs = [];
 			var parts = [];
 			
+			socket.on('get_search_value', function(search_name){
+				document.getElementById("filter_val").innerHTML = "Filter:   " +search_name;
+			});
 			function ExplodeAnimation(x,y)
 			{
 			  var geometry = new THREE.Geometry();
@@ -93,7 +103,7 @@
 				object[index].style.width = 260;
 				object[index].style.backgroundImage= "url('http://www.pixelstalk.net/wp-content/uploads/2016/06/HD-Twitter-Background-620x388.png')";
 				object[index].innerHTML = "<B>Nom:</B> <span style='background:#FFFFFF'><B>" + tweet_user_name +"</B></span> ||<br />@" + screen_name + "<br /><br /> " + tweet_text;
-				var alea_top = aleatoire(500, 600);
+				var alea_top = aleatoire(500, 900);
 				var alea_left = aleatoire(0, 1500);
 				object[index].style.top = alea_top + 'px';
 				object[index].style.left = alea_left + 'px';
@@ -114,7 +124,7 @@
 				object_img[index].style.borderStyle = "solid";
 				object_img[index].style.borderWidth = "3px";
 				object_img[index].style.boxShadow = "5px 5px 5px #555";
-				object[index].addEventListener('click', function() {
+				object[index].addEventListener('mousedown', function() {
 					  event.preventDefault();
 					parts.push(new ExplodeAnimation((Math.random() * sizeRandomness)-(sizeRandomness/2), (Math.random() * sizeRandomness)-(sizeRandomness/2)));
 		
