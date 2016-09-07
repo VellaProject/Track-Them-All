@@ -12,8 +12,10 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
 			var object = [];
+			var object_img = [];
 			var socket = io.connect('http://localhost:8080');
 			var index = 0;
+			var full_bar = 1;
 			
 			socket.on('get_info', function(tweet_text, tweet_img_url, tweet_user_name, screen_name){
 				object[index] = document.createElement('div');	
@@ -30,6 +32,19 @@
 				object[index].style.borderStyle = "solid";
 				object[index].style.borderWidth = "3px";
 				object[index].style.boxShadow = "5px 5px 5px #555";
+				object_img[index] = document.createElement("img");
+				object_img[index].setAttribute("src", tweet_img_url);
+				object_img[index].setAttribute("height", "70");
+				object_img[index].setAttribute("width", "70");
+				object_img[index].style.position = 'absolute';
+				object_img[index].style.top = alea_top - 70 + 'px';
+				object_img[index].style.left = alea_left + 92 + 'px';
+				object_img[index].style.borderRadius = "8px";
+				object_img[index].style.borderColor = "black";
+				object_img[index].style.borderStyle = "solid";
+				object_img[index].style.borderWidth = "3px";
+				object_img[index].style.boxShadow = "5px 5px 5px #555";
+				document.body.appendChild(object_img[index]);
 				document.body.appendChild(object[index]);
 				index++;
 			 });
@@ -62,9 +77,17 @@
 			function aleatoire(min, max) { 
 				return (Math.floor((max-min)*Math.random())+min); 
 			} 
-			
 			var render = function () {
+				var longueur = object.length;
 				requestAnimationFrame( render );
+				for(var i=0; i<longueur; i++)
+				{
+			
+					var posY = object[i].offsetTop;
+					var posY2 = object_img[i].offsetTop;
+					object_img[i].style.top = posY2 - full_bar  +'px';
+					object[i].style.top = posY - full_bar  +'px';
+				}
 				cube.rotation.y += 0.1;
 				cube2.rotation.y += 0.1;
 				cube3.rotation.y += 0.1;
