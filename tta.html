@@ -25,6 +25,53 @@
 			var full_bar = 1;
 			var score = 0;
 			var destroy = 0;
+			var movementSpeed = 80;
+			var totalObjects = 1000;
+			var objectSize = 10;
+			var sizeRandomness = 1000;
+			var colors = [0x0000FF, 0x6600ff, 0xFF000F, 0xff0033, 0xFFFFFF];
+			var dirs = [];
+			var parts = [];
+			
+			function ExplodeAnimation(x,y)
+			{
+			  var geometry = new THREE.Geometry();
+			  
+			  for (i = 0; i < totalObjects; i ++) 
+			  { 
+				var vertex = new THREE.Vector3();
+				vertex.x = x;
+				vertex.y = y;
+				vertex.z = 0;
+			  
+				geometry.vertices.push( vertex );
+				dirs.push({x:(Math.random() * movementSpeed)-(movementSpeed/2),y:(Math.random() * movementSpeed)-(movementSpeed/2),z:(Math.random() * movementSpeed)-(movementSpeed/2)});
+			  }
+			  var material = new THREE.ParticleBasicMaterial( { size: objectSize,  color: colors[Math.round(Math.random() * colors.length)] });
+			  var particles = new THREE.ParticleSystem( geometry, material );
+			  
+			  this.object = particles;
+			  this.status = true;
+			  
+			  this.xDir = (Math.random() * movementSpeed)-(movementSpeed/2);
+			  this.yDir = (Math.random() * movementSpeed)-(movementSpeed/2);
+			  this.zDir = (Math.random() * movementSpeed)-(movementSpeed/2);
+			  
+			  scene.add( this.object  ); 
+			  
+			  this.update = function(){
+				if (this.status == true){
+				  var pCount = totalObjects;
+				  while(pCount--) {
+					var particle =  this.object.geometry.vertices[pCount]
+					particle.y += dirs[pCount].y;
+					particle.x += dirs[pCount].x;
+					particle.z += dirs[pCount].z;
+				  }
+				  this.object.geometry.verticesNeedUpdate = true;
+				}
+			  }
+			}
 			
 			socket.on('get_info', function(tweet_text, tweet_img_url, tweet_user_name, screen_name){
 				object[index] = document.createElement('div');	
@@ -54,25 +101,28 @@
 				object_img[index].style.borderWidth = "3px";
 				object_img[index].style.boxShadow = "5px 5px 5px #555";
 				object[index].addEventListener('click', function() {
+					  event.preventDefault();
+					parts.push(new ExplodeAnimation((Math.random() * sizeRandomness)-(sizeRandomness/2), (Math.random() * sizeRandomness)-(sizeRandomness/2)));
+		
 						destroy += 0.1;
+						score++;
 						this.style.display = 'none';
 						var progress = document.getElementById("progress");
 						if(progress.clientWidth < 500)
 							progress.style.width = progress.clientWidth + 100;
-					
 					}, false);
 				document.body.appendChild(object_img[index]);
 				document.body.appendChild(object[index]);
 				index++;
 			 });
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 10000);
 			var renderer = new THREE.WebGLRenderer({ alpha: true });
 			
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 2, 0.2, 0.4 );
+			var geometry = new THREE.BoxGeometry( 300, 230, 100 );
 			var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 			var material2 = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 			var material3 = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
@@ -83,20 +133,25 @@
 			scene.add( cube );
 			scene.add(cube2);
 			scene.add(cube3);
-			cube.position.y = -2;	
+			cube.position.y = -200;	
 			cube2.position.y = cube.position.y;	
 			cube3.position.y = cube.position.y;					
-			cube.position.x = -3;		
-			cube2.position.x = cube.position.x + 3;
-			cube3.position.x = cube2.position.x + 3;;
-			camera.position.z = 5;
+			cube.position.x = -300;		
+			cube2.position.x = cube.position.x + 300;
+			cube3.position.x = cube2.position.x + 300;
+			camera.position.z = 1000;
 			
 			function aleatoire(min, max) { 
 				return (Math.floor((max-min)*Math.random())+min); 
 			} 
 			var render = function () {
+			
 				var longueur = object.length;
 				requestAnimationFrame( render );
+				 var pCount = parts.length;
+				  while(pCount--) {
+					parts[pCount].update();
+				  }
 				for(var i=0; i<longueur; i++)
 				{
 			
@@ -110,18 +165,20 @@
 				cube3.rotation.y += 0.1 + destroy;
 				if(destroy >= 0.5)
 				{
-					cube.translateY(0.1);
-					cube2.translateY(0.1);
-					cube3.translateY(0.1);
+					cube.translateY(14);
+					cube2.translateY(14);
+					cube3.translateY(14);
+					document.getElementById("progress").style.backgroundColor = "red";
 				}
-				if(cube.position.y > 5)
+				if(cube.position.y > 900)
 				{
 					destroy = 0;
-					cube.position.y = -2;	
+					cube.position.y = -200;	
 					cube2.position.y = cube.position.y;	
 					cube3.position.y = cube.position.y;		
 					document.getElementById("progress").style.width = 0;
 					full_bar += 1;
+					document.getElementById("progress").style.backgroundColor = "#7FFFD4";
 				}
 				renderer.render(scene, camera);
 			};
