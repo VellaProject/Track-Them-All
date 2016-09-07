@@ -17,6 +17,7 @@ var server = http.createServer(function(req, res) {
         res.end(content);
     });
 });
+console.log("Enter on any browser: localhost:8080");
 
 var io = require('socket.io').listen(server);
 
@@ -36,6 +37,7 @@ var io = require('socket.io').listen(server);
 				console.log("Tweet URL IMG : " + tweet_img_profile);
 				console.log("Tweet ID : "+ tweet_id);
 				console.log("Tweet Text : " + tweet_text);
+				console.log("Debug Mode");
 				console.log("-----------------------------");
 				io.emit('get_info', tweet_text, tweet_img_profile, tweet_name, tweet_screen_name);
 			});
