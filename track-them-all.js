@@ -17,7 +17,9 @@ var server = http.createServer(function(req, res) {
     });
 });
 
-client.stream('statuses/filter', { track: '#TPMP' },
+var io = require('socket.io').listen(server);
+
+client.stream('statuses/filter', { track: '#SiTas10AnsTasPasConnu' },
 	function(stream) {
 		stream.on('data', function( tweet ) {
             var tweet_id = tweet.id_str;
@@ -39,6 +41,7 @@ client.stream('statuses/filter', { track: '#TPMP' },
 			console.log("Tweet ID : "+ tweet_id);
             console.log("Tweet Text : " + tweet_text);
 			console.log("-----------------------------");
+			io.emit('get_info', tweet_text, tweet_img_profile, tweet_name, tweet_screen_name);
         });
  
         stream.on('error', function ( error ) {
