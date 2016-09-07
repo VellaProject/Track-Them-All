@@ -8,11 +8,25 @@
 			}
 			#progress{  width: 0; height:40;background-color:#7FFFD4; border-radius: 10px;
 			}
+			#user_score{ position: absolute; top:130px; left:350px; font-size:80px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#score_img{ position: absolute; top:0px; left:0px; width: 400; height:100;}
+			#text_score{position: absolute; top:130px; left:5px; font-size:80px;
+			font-family:fantasy;}
+			#bar_score{ position: absolute; top:300px; left:350px; font-size:80px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#text_bar{position: absolute; top:300px; left:10px; font-size:80px;
+			font-family:fantasy;}
 			body { margin: 0; }
 			canvas { width: 100%; height: 100%; background-image:url("http://iwallpapers.free.fr/upload/2013/01/05/20130105165505-dcc9fdf8.jpg");}
 		</style>
 	</head>
 	<body>
+	<div id = "text_score">Tweet Hit</div>
+	<div id = "user_score">0</div>
+	<div id = "text_bar">Full Bar</div>
+	<div id = "bar_score">0</div>
+	<img id="score_img" src="http://www.firsttouchgames.com/w/wp-content/uploads/2012/06/score_logo_512.png"/>
 	<div id="bar"><div id="progress"></div><div>
 		<script src="http://threejs.org/build/three.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -110,6 +124,7 @@
 						var progress = document.getElementById("progress");
 						if(progress.clientWidth < 500)
 							progress.style.width = progress.clientWidth + 100;
+						document.getElementById("user_score").innerHTML = "<B><font color='red'>"+score+"</font></B>";
 					}, false);
 				document.body.appendChild(object_img[index]);
 				document.body.appendChild(object[index]);
@@ -122,7 +137,7 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 300, 230, 100 );
+			var geometry = new THREE.BoxGeometry( 280, 230, 60 );
 			var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 			var material2 = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 			var material3 = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
@@ -179,6 +194,9 @@
 					document.getElementById("progress").style.width = 0;
 					full_bar += 1;
 					document.getElementById("progress").style.backgroundColor = "#7FFFD4";
+					var s_bar = full_bar - 1;
+					document.getElementById("bar_score").innerHTML = "<B><font color='red'>"+s_bar+"</font></B>";
+					
 				}
 				renderer.render(scene, camera);
 			};
