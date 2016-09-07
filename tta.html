@@ -7,15 +7,31 @@
 		</style>
 	</head>
 	<body>
-		<h1>Base </h1>
 		<script src="http://threejs.org/build/three.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
-			 var socket = io.connect('http://localhost:8080');
-			 
-			 socket.on('get_info', function(tweet_text, tweet_img_url, tweet_user_name, screen_name){
-				//alert('ok');
+			var object = [];
+			var socket = io.connect('http://localhost:8080');
+			var index = 0;
+			
+			socket.on('get_info', function(tweet_text, tweet_img_url, tweet_user_name, screen_name){
+				object[index] = document.createElement('div');	
+				object[index].style.position = 'absolute';
+				object[index].style.width = 260;
+				object[index].style.backgroundImage= "url('http://www.pixelstalk.net/wp-content/uploads/2016/06/HD-Twitter-Background-620x388.png')";
+				object[index].innerHTML = "<B>Nom:</B> <span style='background:#FFFFFF'><B>" + tweet_user_name +"</B></span> ||<br />@" + screen_name + "<br /><br /> " + tweet_text;
+				var alea_top = aleatoire(400, 600);
+				var alea_left = aleatoire(0, 1500);
+				object[index].style.top = alea_top + 'px';
+				object[index].style.left = alea_left + 'px';
+				object[index].style.borderRadius = "8px";
+				object[index].style.borderColor = "black";
+				object[index].style.borderStyle = "solid";
+				object[index].style.borderWidth = "3px";
+				object[index].style.boxShadow = "5px 5px 5px #555";
+				document.body.appendChild(object[index]);
+				index++;
 			 });
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -42,6 +58,11 @@
 			cube2.position.x = cube.position.x + 3;
 			cube3.position.x = cube2.position.x + 3;;
 			camera.position.z = 5;
+			
+			function aleatoire(min, max) { 
+				return (Math.floor((max-min)*Math.random())+min); 
+			} 
+			
 			var render = function () {
 				requestAnimationFrame( render );
 				cube.rotation.y += 0.1;
@@ -49,8 +70,7 @@
 				cube3.rotation.y += 0.1;
 				renderer.render(scene, camera);
 			};
-			render();
-	
+			render();	
 		</script>
 	</body>
 </html>
