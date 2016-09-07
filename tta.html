@@ -2,11 +2,18 @@
 	<head>
 		<title>Track Them All</title>
 		<style>
-		body { margin: 0; }
+			#bar{ position: absolute; top:5px;left:720px; width: 500; height:40;
+					border: 3px solid black;
+					border-radius: 10px;
+			}
+			#progress{  width: 0; height:40;background-color:#7FFFD4; border-radius: 10px;
+			}
+			body { margin: 0; }
 			canvas { width: 100%; height: 100%; background-image:url("http://iwallpapers.free.fr/upload/2013/01/05/20130105165505-dcc9fdf8.jpg");}
 		</style>
 	</head>
 	<body>
+	<div id="bar"><div id="progress"></div><div>
 		<script src="http://threejs.org/build/three.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
@@ -16,6 +23,8 @@
 			var socket = io.connect('http://localhost:8080');
 			var index = 0;
 			var full_bar = 1;
+			var score = 0;
+			var destroy = 0;
 			
 			socket.on('get_info', function(tweet_text, tweet_img_url, tweet_user_name, screen_name){
 				object[index] = document.createElement('div');	
@@ -23,7 +32,7 @@
 				object[index].style.width = 260;
 				object[index].style.backgroundImage= "url('http://www.pixelstalk.net/wp-content/uploads/2016/06/HD-Twitter-Background-620x388.png')";
 				object[index].innerHTML = "<B>Nom:</B> <span style='background:#FFFFFF'><B>" + tweet_user_name +"</B></span> ||<br />@" + screen_name + "<br /><br /> " + tweet_text;
-				var alea_top = aleatoire(400, 600);
+				var alea_top = aleatoire(500, 600);
 				var alea_left = aleatoire(0, 1500);
 				object[index].style.top = alea_top + 'px';
 				object[index].style.left = alea_left + 'px';
@@ -44,6 +53,14 @@
 				object_img[index].style.borderStyle = "solid";
 				object_img[index].style.borderWidth = "3px";
 				object_img[index].style.boxShadow = "5px 5px 5px #555";
+				object[index].addEventListener('click', function() {
+						destroy += 0.1;
+						this.style.display = 'none';
+						var progress = document.getElementById("progress");
+						if(progress.clientWidth < 500)
+							progress.style.width = progress.clientWidth + 100;
+					
+					}, false);
 				document.body.appendChild(object_img[index]);
 				document.body.appendChild(object[index]);
 				index++;
@@ -88,9 +105,24 @@
 					object_img[i].style.top = posY2 - full_bar  +'px';
 					object[i].style.top = posY - full_bar  +'px';
 				}
-				cube.rotation.y += 0.1;
-				cube2.rotation.y += 0.1;
-				cube3.rotation.y += 0.1;
+				cube.rotation.y += 0.1 + destroy;
+				cube2.rotation.y += 0.1 + destroy;
+				cube3.rotation.y += 0.1 + destroy;
+				if(destroy >= 0.5)
+				{
+					cube.translateY(0.1);
+					cube2.translateY(0.1);
+					cube3.translateY(0.1);
+				}
+				if(cube.position.y > 5)
+				{
+					destroy = 0;
+					cube.position.y = -2;	
+					cube2.position.y = cube.position.y;	
+					cube3.position.y = cube.position.y;		
+					document.getElementById("progress").style.width = 0;
+					full_bar += 1;
+				}
 				renderer.render(scene, camera);
 			};
 			render();	
