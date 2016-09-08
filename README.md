@@ -25,7 +25,7 @@
 ###Clicker sur un tweet augmente votre barre de progression et la rapidité de rotation des cubes qui compose le drapeau.
 ###Une fois la barre de progression remplie le drapeau se stabilise et monte pendant quelque seconde, pendant ce laps de temps votre barre de progression est figée, ensuite le drapeau revient comme au départ et votre barre de progression est réinitialisé.
 ###A chaque barre de progession remplie, les tweets montent de plus en plus vite.
-###Le score final est calculé de la manière suivante: Nb_Tweet_Clicker x Nb_Barre_Remplie
+###Le score final est calculé de la manière suivante: (Nb_Tweet_Clicker  - (All_Tweet - Nb_Tweet_Clicker)) x Nb_Barre_Remplie
 ###Il est judicieux de ne pas clicker sur des tweets pendant que votre barre est figée, pour les clicker plus tard et donc remplir la barre. Mais attention vous n'avez pas toujours le temps avant qu'ils disparaissent.
 ##Difficulter?
 ###Avec Track-Them-All la difficulté c'est vous qui la choisissez, aller sur twitter regarder les Hashtags en Top Tendance et mettez un dans le fichier de configuration.

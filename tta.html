@@ -9,30 +9,42 @@
 			}
 			#progress{  width: 0; height:40;background-color:#7FFFD4; border-radius: 10px;
 			}
-			#user_score{ position: absolute; top:130px; left:390px; font-size:80px;
+			#user_score{ position: absolute; top:280px; left:390px; font-size:80px;
 			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
 			#score_img{ position: absolute; top:0px; left:0px; width: 400; height:100;
 			box-shadow:5px 5px 5px #555;
 			}
-			#text_score{position: absolute; top:130px; left:5px; font-size:80px; width:350px;
+			#text_score{position: absolute; top:280px; left:5px; font-size:80px; width:350px;
 			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
-			#bar_score{ position: absolute; top:280px; left:390px; font-size:80px;
+			#bar_score{ position: absolute; top:435px; left:390px; font-size:80px;
 			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
-			#text_bar{position: absolute; top:280px; left:10px; font-size:80px; width:350px;
+			#text_bar{position: absolute; top:435px; left:10px; font-size:80px; width:350px;
 			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
 			#filter_val{position: absolute;top:3px;font-size:40px;font-family:fantasy;
 				right:160px;border: 1px solid black; box-shadow:5px 5px 5px #555;
 			}
+			#sc_val{ position: absolute; top:585px; left:390px; font-size:80px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#sc_text{position: absolute; top:585px; left:10px; font-size:80px; width:350px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#total_val{ position: absolute; top:130px; left:390px; font-size:80px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
+			#total_text{position: absolute; top:130px; left:10px; font-size:80px; width:350px;
+			font-family:fantasy;border: 1px solid black; box-shadow:5px 5px 5px #555;}
 			body { margin: 0; background-image:url("http://iwallpapers.free.fr/upload/2013/01/05/20130105165505-dcc9fdf8.jpg"); }
 			canvas { width: 100%; height: 100%;}
 		</style>
 	</head>
 	<body>
+	<div id= "total_text">All Tweet</div>
+	<div id = "total_val">0</div>
 	<div id= "filter_val"></div>
 	<div id = "text_score">Tweet Hit</div>
 	<div id = "user_score">0</div>
 	<div id = "text_bar">Full Bar</div>
 	<div id = "bar_score">0</div>
+	<div id = "sc_text">Score</div>
+	<div id = "sc_val">0</div>
 	<img id="score_img" src="http://www.firsttouchgames.com/w/wp-content/uploads/2012/06/score_logo_512.png"/>
 	<div id="bar"><div id="progress"></div><div>
 		<script src="http://threejs.org/build/three.js"></script>
@@ -45,6 +57,7 @@
 			var index = 0;
 			var full_bar = 1;
 			var score = 0;
+			var final_score = 0;
 			var destroy = 0;
 			var movementSpeed = 80;
 			var totalObjects = 1000;
@@ -54,6 +67,7 @@
 			var dirs = [];
 			var parts = [];
 			var stop_rotate = 0;
+			var nb_tweet_get = 0;
 			
 			socket.on('get_search_value', function(search_name){
 				document.getElementById("filter_val").innerHTML = "Filter:   " +search_name;
@@ -99,6 +113,10 @@
 			}
 			
 			socket.on('get_info', function(tweet_text, tweet_img_url, tweet_user_name, screen_name){
+				nb_tweet_get++;
+				document.getElementById("total_val").innerHTML = "<B><font color='red'>"+nb_tweet_get+"</font></B>";
+				final_score = (score - (nb_tweet_get - score)) * (full_bar - 1);
+				document.getElementById("sc_val").innerHTML = "<B><font color='red'>"+final_score+"</font></B>";	
 				object[index] = document.createElement('div');	
 				object[index].style.position = 'absolute';
 				object[index].style.width = 260;
@@ -136,6 +154,8 @@
 						if(progress.clientWidth < 500)
 							progress.style.width = progress.clientWidth + 100;
 						document.getElementById("user_score").innerHTML = "<B><font color='red'>"+score+"</font></B>";
+						final_score = (score - (nb_tweet_get - score)) * (full_bar - 1);
+						document.getElementById("sc_val").innerHTML = "<B><font color='red'>"+final_score+"</font></B>";
 					}, false);
 				document.body.appendChild(object_img[index]);
 				document.body.appendChild(object[index]);
@@ -215,7 +235,8 @@
 					document.getElementById("progress").style.backgroundColor = "#7FFFD4";
 					var s_bar = full_bar - 1;
 					document.getElementById("bar_score").innerHTML = "<B><font color='red'>"+s_bar+"</font></B>";
-					
+					final_score = (score - (nb_tweet_get - score)) * (full_bar - 1);
+					document.getElementById("sc_val").innerHTML = "<B><font color='red'>"+final_score+"</font></B>";	
 				}
 				renderer.render(scene, camera);
 			};
