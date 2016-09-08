@@ -31,3 +31,4 @@
 ###Avec Track-Them-All la difficulté, c'est vous qui la choisissez; allez sur twitter regarder les Hashtags en Top Tendance et mettez en un dans le fichier de configuration.
 ###Plus le Hashtag est tendance, plus il y aura de tweet affiché sur Track-Them-All.
 ###Bonne Chance !
+![Track-Them-All](https://github.com/VellaProject/Track-Them-All/blob/master/examples/img_2.png)
