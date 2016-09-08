@@ -19,6 +19,7 @@ var server = http.createServer(function(req, res) {
 });
 
 console.log("Enter on any browser: localhost:8080");
+console.log("Press CTRL + C to leave");
 
 var io = require('socket.io').listen(server);
 

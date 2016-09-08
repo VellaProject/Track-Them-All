@@ -144,9 +144,7 @@
 				object_img[index].style.borderWidth = "3px";
 				object_img[index].style.boxShadow = "5px 5px 5px #555";
 				object[index].addEventListener('mousedown', function() {
-					  event.preventDefault();
 					parts.push(new ExplodeAnimation((Math.random() * sizeRandomness)-(sizeRandomness/2), (Math.random() * sizeRandomness)-(sizeRandomness/2)));
-		
 						destroy += 0.1;
 						score++;
 						this.style.display = 'none';
