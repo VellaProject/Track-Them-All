@@ -23,6 +23,7 @@ console.log("Enter on any browser: localhost:8080");
 var io = require('socket.io').listen(server);
 
 	io.sockets.on('connection', function (socket) {
+		console.log("Wait Tweet");
 		client.stream('statuses/filter', { track: search_val },
 		function(stream) {
 			stream.on('data', function( tweet ) {
