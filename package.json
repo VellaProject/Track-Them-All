@@ -1,6 +1,6 @@
 {
-    "name": "track-them-all"
-    "version": "0.1.0"
+    "name": "track-them-all",
+    "version": "0.1.0",
     "dependencies": {
 	"socket.io": "1.4.8",
 	"twitter": "1.4.0"
